@@ -1,4 +1,19 @@
-section {
+div {
+    width: 900px;
 	display: flex;
 	flex-direction: row;
+    justify-content: space-around;
+}
+section {
+    display: flex;
+    flex-direction: row;
+}
+article{
+    align-items: center;
+    width: 200px;
+}
+
+.btn {
+    border:0;
+    background:transparent
 }
