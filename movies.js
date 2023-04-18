@@ -1,37 +1,67 @@
+let displayNumber = 4;
+
+let smallScreen = window.matchMedia("(max-width: 650px)");
+let mediumScreen = window.matchMedia("(max-width: 900px)");
+let largeScreen = window.matchMedia("(max-width: 1150px)");
+let xLargeScreen = window.matchMedia("(max-width: 1300px)");
+
+if (smallScreen.matches) {
+    displayNumber = 1;
+} else if (mediumScreen.matches) {
+    displayNumber = 2;
+} else if (largeScreen.matches) {
+    displayNumber = 3;
+} else if (xLargeScreen.matches) {
+    displayNumber = 4;
+}
+
 function displayCategory(start, moviesList, category) {
     /* Display 4 movies from the movieList starting from start
       in the category zone */
-    var end = start + 4;
+      category.innerText = "";
+      console.log("disNum : ",displayNumber);
+      let end = start + displayNumber;
+      console.log("end : ",end);
 
-    for (let i = start; i < end; i++) {
-        let movieArticle = document.createElement("article")
-        let nameMovie = document.createElement("p");
+      for (let i = start; i < end; i++) {
+        let movieArticle = document.createElement("article");
+        movieArticle.classList.add("movie-poster");
+        let movieTitleBox = document.createElement("div");
+        movieTitleBox.classList.add("movie-title-box");
+        let nameMovie = document.createElement("h3");
+        nameMovie.classList.add("movie-title");
         nameMovie.innerText = moviesList[i].title;
         let imageMovie = document.createElement("img");
-        imageMovie.src = moviesList[i].image_url;
+        imageMovie.src = moviesList[i].image_url ?? "./images/movie-poster-coming-soon.png";
         imageMovie.onclick = function () {
             modal.style.display = "block";
             displayMovieInfo(moviesList[i].url)
         
         }
         /*console.log("Dcat", i);*/
-        movieArticle.appendChild(nameMovie);
+        movieTitleBox.appendChild(nameMovie);
+        movieArticle.appendChild(movieTitleBox);
         movieArticle.appendChild(imageMovie);
         category.appendChild(movieArticle);
 
     }
 }
 
-function displayBestFilm(movieList) {
+async function displayBestFilm(movieList) {
     /* display the best film */
-    /*console.log("BF:", movieList[0])*/
-    const sectionBestFilm = document.querySelector("#best_film");
-    const movieArticle = document.createElement("article")
-    const nameMovie = document.createElement("p");
-    nameMovie.innerText = movieList[0]["title"];
-    const imageMovie = document.createElement("img");
+    let query = await fetch(movieList[0].url);
+    let jsonQuery = await query.json();
+    let sectionBestFilm = document.querySelector("#best-film");
+    let moviePoster = document.createElement("div")
+    let movieInfos = document.createElement("div")
+    movieInfos.classList.add("BF-infos");
+    let nameMovie = document.createElement("h1");
+    nameMovie.innerText = movieList[0].title;
+    let descriptionMovie = document.createElement("p");
+    descriptionMovie.innerText = jsonQuery.description;
+    let imageMovie = document.createElement("img");
     imageMovie.src = movieList[0].image_url
-    const infoButton = document.createElement("button");
+    let infoButton = document.createElement("button");
     infoButton.innerText = "Informations";
     infoButton.id = "BestFilmBtn";
     // When the user clicks on the button, open the modal
@@ -39,10 +69,12 @@ function displayBestFilm(movieList) {
         modal.style.display = "block";
         displayMovieInfo(movieList[0].url)
     }
-    movieArticle.appendChild(nameMovie);
-    movieArticle.appendChild(imageMovie);
-    movieArticle.appendChild(infoButton);
-    sectionBestFilm.appendChild(movieArticle);
+    movieInfos.appendChild(nameMovie);
+    movieInfos.appendChild(descriptionMovie);
+    movieInfos.appendChild(infoButton);
+    moviePoster.appendChild(imageMovie);
+    sectionBestFilm.appendChild(moviePoster);
+    sectionBestFilm.appendChild(movieInfos);
 }
 
 async function retrieveMoviesList(url, url2, category) {
@@ -63,7 +95,7 @@ function categoryRightButtonHandling(category, startItem, selector) {
     let moviesList = JSON.parse(window.localStorage.getItem(category))
     let start = JSON.parse(window.localStorage.getItem(startItem))
 
-    if (start < 6) {
+    if (start < (10 - displayNumber)) {
         start += 1
         let sectionCategory = document.querySelector(selector);
         sectionCategory.textContent = ""
@@ -90,14 +122,18 @@ async function displayMovieInfo(url) {
     let jsonQuery = await query.json();
     console.log(jsonQuery)
     // get the modal
-    const modal = document.querySelector(".movie-info");
-    modal.textContent = ""
-
-    const movieInfos = document.createElement("article");
+    const modalPoster = document.querySelector(".modal-movie-poster");
+    modalPoster.textContent = ""
+    const modalInfos = document.querySelector(".modal-movie-info");
+    modalInfos.textContent = ""
+    
     const imageMovie = document.createElement("img");
     imageMovie.src = jsonQuery.image_url;
-    const nameMovie = document.createElement("p");
-    nameMovie.innerText = `Titre : ${jsonQuery.title}`;
+    modalPoster.appendChild(imageMovie);
+ 
+    const movieInfos = document.createElement("article");
+    const nameMovie = document.createElement("h3");
+    nameMovie.innerText = jsonQuery.title;
     const genresMovie = document.createElement("p")
     let genres = "";
     for (let genre of jsonQuery.genres) {
@@ -130,7 +166,8 @@ async function displayMovieInfo(url) {
     const descriptionMovie = document.createElement("p");
     descriptionMovie.innerText = "Résumé : " + jsonQuery.description;
 
-    movieInfos.appendChild(imageMovie);
+
+     
     movieInfos.appendChild(nameMovie);
     movieInfos.appendChild(genresMovie);
     movieInfos.appendChild(dateMovie);
@@ -142,13 +179,40 @@ async function displayMovieInfo(url) {
     movieInfos.appendChild(countryMovie);
     movieInfos.appendChild(boxOfficeMovie);
     movieInfos.appendChild(descriptionMovie);
-    modal.appendChild(movieInfos);
+    modalInfos.appendChild(movieInfos);
+}
+
+function displayAllCategory(){
+    
+    //console.log("disNum : ",displayNumber);
+    let sectionCategory = document.querySelector("#other-best-films");
+    let BFStart = JSON.parse(window.localStorage.getItem("BFStart"))
+    displayCategory(BFStart, moviesList, sectionCategory);
+
+    /* display category 1 */
+    moviesList = JSON.parse(window.localStorage.getItem("category1"))
+    /*console.log("cat1", moviesList)*/
+    sectionCategory = document.querySelector("#category1");
+    let cat1Start = JSON.parse(window.localStorage.getItem("cat1Start"))
+    displayCategory(cat1Start, moviesList, sectionCategory)
+
+    /* display category 2 */
+    moviesList = JSON.parse(window.localStorage.getItem("category2"))
+    sectionCategory = document.querySelector("#category2");
+    let cat2Start = JSON.parse(window.localStorage.getItem("cat1Start"))
+    displayCategory(cat2Start, moviesList, sectionCategory)
+
+    /* display category 3 */
+    moviesList = JSON.parse(window.localStorage.getItem("category3"))
+    sectionCategory = document.querySelector("#category3");
+    let cat3Start = JSON.parse(window.localStorage.getItem("cat1Start"))
+    displayCategory(cat3Start, moviesList, sectionCategory)
 }
 
 /* retrieve data from database and store in local storage*/
 let url1 = "http://localhost:8000/api/v1/titles/?sort_by=-imdb_score,title";
 let url2 = "http://localhost:8000/api/v1/titles/?page=2&sort_by=-imdb_score%2Ctitle";
-retrieveMoviesList(url1, url2, "best_films");
+retrieveMoviesList(url1, url2, "best-films");
 window.localStorage.setItem("BFStart", JSON.stringify(1));
 
 
@@ -168,41 +232,20 @@ retrieveMoviesList(url1, url2, "category3");
 window.localStorage.setItem("cat3Start", JSON.stringify(0));
 
 /* display Bests films*/
-let moviesList = JSON.parse(window.localStorage.getItem("best_films"))
+let moviesList = JSON.parse(window.localStorage.getItem("best-films"))
 displayBestFilm(moviesList);
 
-let sectionCategory = document.querySelector("#other_best_films");
-let BFStart = JSON.parse(window.localStorage.getItem("BFStart"))
-displayCategory(BFStart, moviesList, sectionCategory);
-
-/* display category 1 */
-moviesList = JSON.parse(window.localStorage.getItem("category1"))
-/*console.log("cat1", moviesList)*/
-sectionCategory = document.querySelector("#category1");
-let cat1Start = JSON.parse(window.localStorage.getItem("cat1Start"))
-displayCategory(cat1Start, moviesList, sectionCategory)
-
-/* display category 2 */
-moviesList = JSON.parse(window.localStorage.getItem("category2"))
-sectionCategory = document.querySelector("#category2");
-let cat2Start = JSON.parse(window.localStorage.getItem("cat1Start"))
-displayCategory(cat2Start, moviesList, sectionCategory)
-
-/* display category 3 */
-moviesList = JSON.parse(window.localStorage.getItem("category3"))
-sectionCategory = document.querySelector("#category3");
-let cat3Start = JSON.parse(window.localStorage.getItem("cat1Start"))
-displayCategory(cat3Start, moviesList, sectionCategory)
+displayAllCategory()
 
 /* Best Films category right button handling */
 let navBtnBFRight = document.querySelector(".btn.BF-right");
 navBtnBFRight.addEventListener("click", async function (event) {
-    let moviesList = JSON.parse(window.localStorage.getItem("best_films"))
+    let moviesList = JSON.parse(window.localStorage.getItem("best-films"))
     let start = JSON.parse(window.localStorage.getItem("BFStart"))
 
-    if (start < 6) {
+    if (start < (10 - displayNumber)) {
         start += 1
-        let sectionCategory = document.querySelector("#other_best_films");
+        let sectionCategory = document.querySelector("#other-best-films");
         sectionCategory.textContent = ""
         displayCategory(start, moviesList, sectionCategory);
         window.localStorage.setItem("BFStart", JSON.stringify(start))
@@ -212,12 +255,12 @@ navBtnBFRight.addEventListener("click", async function (event) {
 /* Best Films category left button handling */
 let navBtnBFLeft = document.querySelector(".btn.BF-left");
 navBtnBFLeft.addEventListener("click", async function (event) {
-    let moviesList = JSON.parse(window.localStorage.getItem("best_films"))
+    let moviesList = JSON.parse(window.localStorage.getItem("best-films"))
     let start = JSON.parse(window.localStorage.getItem("BFStart"))
 
     if (start > 1) {
         start -= 1
-        let sectionCategory = document.querySelector("#other_best_films");
+        let sectionCategory = document.querySelector("#other-best-films");
         sectionCategory.textContent = ""
         displayCategory(start, moviesList, sectionCategory);
         window.localStorage.setItem("BFStart", JSON.stringify(start))
@@ -258,6 +301,30 @@ navBtnCat3Right.addEventListener("click", async function (event) {
 let navBtnCat3Left = document.querySelector(".btn.Cat3-left");
 navBtnCat3Left.addEventListener("click", async function (event) {
     categoryLeftButtonHandling("category3", "cat3Start", "#category3")
+})
+
+smallScreen.addEventListener("change", function(event){
+    displayNumber = 1;
+    console.log("S")
+    displayAllCategory();
+})
+
+mediumScreen.addEventListener("change", function(event){
+    displayNumber = 2;
+    console.log("M")
+    displayAllCategory();
+})
+
+largeScreen.addEventListener("change", function(event){
+    displayNumber = 3;
+    console.log("L")
+    displayAllCategory();
+})
+
+xLargeScreen.addEventListener("change", function(event){
+    displayNumber = 4;
+    console.log("XL")
+    displayAllCategory();
 })
 
 // Get the modal

@@ -10,52 +10,75 @@
 
 <body>
     <header>
-        <img>logo
-        <nav>menu</nav>
+        <img src="./images/logo.png" alt="StreamIt logo" class="logo">
+        <nav><p>Accueil</p><p>Catégories</p> </nav>
     </header>
     <main>
-        <section>
-            <h2>film le mieux noté</h2>
-            <div id="best_film"></div>
+         <section>
+            <div id="best-film"></div>
         </section>
-        <h2>liste films les mieux notés</h2>
-        <section>
+        <h2>Films les mieux notés</h2>
+        <section class="category">
             <button class="btn BF-left">
-                <img src="./images/left_arrow.png" alt="buttonpng"/>
+                <svg height="200" width="50">
+                    <polygon points="50,0 50,200 0,100"/>
+                    Sorry, your browser does not support inline SVG.
+                </svg>
             </button>
-            <div id="other_best_films"></div>
+            <div id="other-best-films" class="carroussel"></div>
             <button class="btn BF-right">
-                <img src="./images/right_arrow.png" alt="buttonpng"/>
+                <svg height="200" width="50">
+                    <polygon points="0,0 0,200 50,100"/>
+                    Sorry, your browser does not support inline SVG.
+                </svg>
             </button>
         </section>
-        <h2>catégorie 1</h2>
-        <section>
+        <h2>Science-Fiction</h2>
+        <section class="category">
             <button class="btn Cat1-left">
-                <img src="./images/left_arrow.png" alt="buttonpng"/>
+                <svg height="200" width="50">
+                    <polygon points="50,0 50,200 0,100"/>
+                    Sorry, your browser does not support inline SVG.
+                </svg>
             </button>
-            <div id="category1"></div>
+            <div id="category1" class="carroussel"></div>
             <button class="btn Cat1-right">
-                <img src="./images/right_arrow.png" alt="buttonpng"/>
+                <svg height="200" width="50">
+                    <polygon points="0,0 0,200 50,100"/>
+                    Sorry, your browser does not support inline SVG.
+                </svg>
             </button>
         </section>
-        <h2>catégorie 2</h2>
-        <section>
+        <h2>Comédie</h2>
+        <section class="category">
             <button class="btn Cat2-left">
-                <img src="./images/left_arrow.png" alt="buttonpng"/>
+                <svg height="200" width="50">
+                    <polygon points="50,0 50,200 0,100"/>
+                    Sorry, your browser does not support inline SVG.
+                </svg>
             </button>
-            <div id="category2"></div>
+            <div id="category2" class="carroussel"></div>
             <button class="btn Cat2-right">
-                <img src="./images/right_arrow.png" alt="buttonpng"/>
+                <svg height="200" width="50">
+                    <polygon points="0,0 0,200 50,100"/>
+                    Sorry, your browser does not support inline SVG.
+                </svg>
             </button>
         </section>
-        <h2>catégorie 3</h2>
-        <section>
+        <h2>Aventure</h2>
+        <section class="category">
             <button class="btn Cat3-left">
-                <img src="./images/left_arrow.png" alt="buttonpng"/>
+                <svg height="200" width="50">
+                    <polygon points="50,0 50,200 0,100"/>
+                    Sorry, your browser does not support inline SVG.
+                </svg>
             </button>
-            <div id="category3"></div>
+            <div id="category3" class="carroussel"></div>
             <button class="btn Cat3-right">
-                <img src="./images/right_arrow.png" alt="buttonpng"/>
+                <svg height="200" width="50">
+                    <polygon points="0,0 0,200 50,100"/>
+                    Sorry, your browser does not support inline SVG.
+                </svg>
             </button>
         </section>
 
@@ -65,11 +88,14 @@
             <!-- Modal content -->
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <div class="movie-info">
-                </div>
+                <div class="modal-movie-poster"></div>
+                <div class="modal-movie-info"></div>
             </div>
         
         </div>
     </main>
+    <footer>
+        <p>Publié par l'association Just Stream It</p>
+    </footer>
 </body>
 
