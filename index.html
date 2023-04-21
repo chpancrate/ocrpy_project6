@@ -3,32 +3,59 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Stream it</title>
+    <title>JustStreamIt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script type="module" src="movies.js"></script>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico?">
 </head>
 
 <body>
     <header>
-        <img src="./images/logo.png" alt="StreamIt logo" class="logo">
-        <nav><p>Accueil</p><p>Catégories</p> </nav>
+        <a href="#" id="openBtn">
+            <span class="burger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        </a>
+        <div id="mySidenav" class="sidenav">
+            <a id="closeBtn" href="#" class="close-burger">&times;</a>
+            <ul>
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Catégories</a></li>
+            </ul>
+        </div>
+        <div class="sub-header">
+            <img src="./images/logo_invert.png" alt="StreamIt logo" class="logo">
+            <nav class="menu">
+                <a href="#">Accueil</a>
+                <a href="#">Catégories</a>
+            </nav>
+        </div>
     </header>
     <main>
-         <section>
+        <section>
             <div id="best-film"></div>
         </section>
         <h2>Films les mieux notés</h2>
         <section class="category">
             <button class="btn BF-left">
-                <svg height="200" width="50">
-                    <polygon points="50,0 50,200 0,100"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="160" fill="#ffffff"
+                    class="chevron-compact-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z" />
                     Sorry, your browser does not support inline SVG.
                 </svg>
             </button>
             <div id="other-best-films" class="carroussel"></div>
             <button class="btn BF-right">
-                <svg height="200" width="50">
-                    <polygon points="0,0 0,200 50,100"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="160" fill="#ffffff"
+                    class="chevron-compact-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
                     Sorry, your browser does not support inline SVG.
                 </svg>
             </button>
@@ -36,15 +63,19 @@
         <h2>Science-Fiction</h2>
         <section class="category">
             <button class="btn Cat1-left">
-                <svg height="200" width="50">
-                    <polygon points="50,0 50,200 0,100"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="160" fill="#ffffff"
+                    class="chevron-compact-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z" />
                     Sorry, your browser does not support inline SVG.
                 </svg>
             </button>
             <div id="category1" class="carroussel"></div>
             <button class="btn Cat1-right">
-                <svg height="200" width="50">
-                    <polygon points="0,0 0,200 50,100"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="160" fill="#ffffff"
+                    class="chevron-compact-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
                     Sorry, your browser does not support inline SVG.
                 </svg>
             </button>
@@ -52,15 +83,19 @@
         <h2>Comédie</h2>
         <section class="category">
             <button class="btn Cat2-left">
-                <svg height="200" width="50">
-                    <polygon points="50,0 50,200 0,100"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="160" fill="#ffffff"
+                    class="chevron-compact-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z" />
                     Sorry, your browser does not support inline SVG.
                 </svg>
             </button>
             <div id="category2" class="carroussel"></div>
             <button class="btn Cat2-right">
-                <svg height="200" width="50">
-                    <polygon points="0,0 0,200 50,100"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="160" fill="#ffffff"
+                    class="chevron-compact-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
                     Sorry, your browser does not support inline SVG.
                 </svg>
             </button>
@@ -68,15 +103,19 @@
         <h2>Aventure</h2>
         <section class="category">
             <button class="btn Cat3-left">
-                <svg height="200" width="50">
-                    <polygon points="50,0 50,200 0,100"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="160" fill="#ffffff"
+                    class="chevron-compact-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z" />
                     Sorry, your browser does not support inline SVG.
                 </svg>
             </button>
             <div id="category3" class="carroussel"></div>
             <button class="btn Cat3-right">
-                <svg height="200" width="50">
-                    <polygon points="0,0 0,200 50,100"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="160" fill="#ffffff"
+                    class="chevron-compact-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
                     Sorry, your browser does not support inline SVG.
                 </svg>
             </button>
@@ -87,15 +126,14 @@
 
             <!-- Modal content -->
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="modal-close">&times;</span>
                 <div class="modal-movie-poster"></div>
                 <div class="modal-movie-info"></div>
             </div>
-        
+
         </div>
     </main>
     <footer>
         <p>Publié par l'association Just Stream It</p>
     </footer>
 </body>
-
