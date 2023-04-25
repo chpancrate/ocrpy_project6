@@ -17,7 +17,7 @@ if (smallScreen.matches) {
     displayNumber = 4;
 }
 
-async function displayCategory(start, moviesList, category) {
+function displayCategory(start, moviesList, category) {
     /* Display displayNumber movies from the movieList starting from start
       in the category zone */
       category.innerText = "";
@@ -28,9 +28,10 @@ async function displayCategory(start, moviesList, category) {
         movieArticle.classList.add("movie-poster");
         let imageMovie = document.createElement("img");
         imageMovie.src = moviesList[i].image_url;
+        imageMovie.alt = moviesList[i].title;
         imageMovie.onclick = function () {
             modal.style.display = "block";
-            displayMovieInfo(moviesList[i].url)
+            displayMovieInfo(moviesList[i].url);
         
         }
         movieArticle.appendChild(imageMovie);
@@ -44,9 +45,9 @@ async function displayBestFilm(movieList) {
     let query = await fetch(movieList[0].url);
     let jsonQuery = await query.json();
     let sectionBestFilm = document.querySelector("#best-film");
-    let moviePoster = document.createElement("div")
+    let moviePoster = document.createElement("div");
     moviePoster.classList.add("BF-poster");
-    let movieInfos = document.createElement("div")
+    let movieInfos = document.createElement("div");
     movieInfos.classList.add("BF-infos");
     let nameMovie = document.createElement("h1");
     nameMovie.innerText = movieList[0].title;
@@ -55,6 +56,7 @@ async function displayBestFilm(movieList) {
     movieInfos.classList.add("BF-infos-text");
     let imageMovie = document.createElement("img");
     imageMovie.src = movieList[0].image_url;
+    imageMovie.alt = movieList[0].title;
     // informations button creation
     let infoButton = document.createElement("button");
     infoButton.innerText = "Informations";
@@ -78,40 +80,40 @@ async function retrieveMoviesList(url, url2, category) {
     let query = await fetch(url);
     let jsonQuery = await query.json();
     let movies1 = jsonQuery.results;
-    let query2 = await fetch(url2)
+    let query2 = await fetch(url2);
     let jsonQuery2 = await query2.json();
     let movies2 = jsonQuery2.results;
-    let moviesList = movies1.concat(movies2)
+    let moviesList = movies1.concat(movies2);
     window.localStorage.setItem(category, JSON.stringify(moviesList));
 }
 
 function categoryRightButtonHandling(category, startItem, selector) {
     /* handle the right button for the carroussel */
-    let moviesList = JSON.parse(window.localStorage.getItem(category))
-    let start = JSON.parse(window.localStorage.getItem(startItem))
+    let moviesList = JSON.parse(window.localStorage.getItem(category));
+    let start = JSON.parse(window.localStorage.getItem(startItem));
 
     if (start < (10 - displayNumber)) {
         /* if there is still place switch the films displayed from one to the right */ 
-        start += 1
+        start += 1;
         let sectionCategory = document.querySelector(selector);
-        sectionCategory.textContent = ""
+        sectionCategory.textContent = "";
         displayCategory(start, moviesList, sectionCategory);
-        window.localStorage.setItem(startItem, JSON.stringify(start))
+        window.localStorage.setItem(startItem, JSON.stringify(start));
     }
 }
 
 function categoryLeftButtonHandling(category, startItem, selector) {
     /* handle the lfht button for the carroussel */
-    let moviesList = JSON.parse(window.localStorage.getItem(category))
-    let start = JSON.parse(window.localStorage.getItem(startItem))
+    let moviesList = JSON.parse(window.localStorage.getItem(category));
+    let start = JSON.parse(window.localStorage.getItem(startItem));
 
     if (start > 0) {
         /* if there is still place switch the films displayed from one to the left */ 
-        start -= 1
+        start -= 1;
         let sectionCategory = document.querySelector(selector);
-        sectionCategory.textContent = ""
+        sectionCategory.textContent = "";
         displayCategory(start, moviesList, sectionCategory);
-        window.localStorage.setItem(startItem, JSON.stringify(start))
+        window.localStorage.setItem(startItem, JSON.stringify(start));
     }
 }
 
@@ -121,18 +123,19 @@ async function displayMovieInfo(url) {
     let jsonQuery = await query.json();
     // get the modal
     let modalPoster = document.querySelector(".modal-movie-poster");
-    modalPoster.textContent = ""
+    modalPoster.textContent = "";
     let modalInfos = document.querySelector(".modal-movie-info");
-    modalInfos.textContent = ""
+    modalInfos.textContent = "";
     // set the poster
     let imageMovie = document.createElement("img");
     imageMovie.src = jsonQuery.image_url;
+    imageMovie.alt = jsonQuery.title;
     modalPoster.appendChild(imageMovie);
     // display the informations
     let movieInfos = document.createElement("article");
     let nameMovie = document.createElement("h3");
     nameMovie.innerText = jsonQuery.title;
-    let genresMovie = document.createElement("p")
+    let genresMovie = document.createElement("p");
     let genres = "";
     for (let genre of jsonQuery.genres) {
         genres = genres + genre + ", ";
@@ -148,7 +151,7 @@ async function displayMovieInfo(url) {
     let directorsMovie = document.createElement("p");
     directorsMovie.innerText = "Réalisateur : " + jsonQuery.directors;
     let actorsMovie = document.createElement("p");
-    let actors = ""
+    let actors = "";
     for (let actor of jsonQuery.actors) {
         actors = actors + actor + ", ";
     }
@@ -182,28 +185,28 @@ async function displayMovieInfo(url) {
 
 function displayAllCategory(){
     /* display all the category in the carrousel */    
-    moviesList = JSON.parse(window.localStorage.getItem("best-films"))
+    moviesList = JSON.parse(window.localStorage.getItem("best-films"));
     let sectionCategory = document.querySelector("#other-best-films");
-    let BFStart = JSON.parse(window.localStorage.getItem("BFStart"))
+    let BFStart = JSON.parse(window.localStorage.getItem("BFStart"));
     displayCategory(BFStart, moviesList, sectionCategory);
 
     /* display category 1 */
-    moviesList = JSON.parse(window.localStorage.getItem("category1"))
+    moviesList = JSON.parse(window.localStorage.getItem("category1"));
     sectionCategory = document.querySelector("#category1");
-    let cat1Start = JSON.parse(window.localStorage.getItem("cat1Start"))
-    displayCategory(cat1Start, moviesList, sectionCategory)
+    let cat1Start = JSON.parse(window.localStorage.getItem("cat1Start"));
+    displayCategory(cat1Start, moviesList, sectionCategory);
 
     /* display category 2 */
-    moviesList = JSON.parse(window.localStorage.getItem("category2"))
+    moviesList = JSON.parse(window.localStorage.getItem("category2"));
     sectionCategory = document.querySelector("#category2");
-    let cat2Start = JSON.parse(window.localStorage.getItem("cat1Start"))
-    displayCategory(cat2Start, moviesList, sectionCategory)
+    let cat2Start = JSON.parse(window.localStorage.getItem("cat1Start"));
+    displayCategory(cat2Start, moviesList, sectionCategory);
 
     /* display category 3 */
-    moviesList = JSON.parse(window.localStorage.getItem("category3"))
+    moviesList = JSON.parse(window.localStorage.getItem("category3"));
     sectionCategory = document.querySelector("#category3");
-    let cat3Start = JSON.parse(window.localStorage.getItem("cat1Start"))
-    displayCategory(cat3Start, moviesList, sectionCategory)
+    let cat3Start = JSON.parse(window.localStorage.getItem("cat1Start"));
+    displayCategory(cat3Start, moviesList, sectionCategory);
 }
 
 /* side navigatin for small screen handling */
@@ -240,66 +243,66 @@ retrieveMoviesList(url1, url2, "category3");
 window.localStorage.setItem("cat3Start", JSON.stringify(0));
 
 /* display the Best film informations */
-let moviesList = JSON.parse(window.localStorage.getItem("best-films"))
+let moviesList = JSON.parse(window.localStorage.getItem("best-films"));
 displayBestFilm(moviesList);
 
-displayAllCategory()
+displayAllCategory();
 
 /* Best Films category right button handling */
 let navBtnBFRight = document.querySelector(".btn.BF-right");
 navBtnBFRight.addEventListener("click", async function (event) {
-    categoryRightButtonHandling("best-films", "BFStart", "#other-best-films")
+    categoryRightButtonHandling("best-films", "BFStart", "#other-best-films");
 })
 
 /* Best Films category left button handling */
 let navBtnBFLeft = document.querySelector(".btn.BF-left");
 navBtnBFLeft.addEventListener("click", async function (event) {
-    let moviesList = JSON.parse(window.localStorage.getItem("best-films"))
-    let start = JSON.parse(window.localStorage.getItem("BFStart"))
+    let moviesList = JSON.parse(window.localStorage.getItem("best-films"));
+    let start = JSON.parse(window.localStorage.getItem("BFStart"));
 
     if (start > 1) {
         start -= 1
         let sectionCategory = document.querySelector("#other-best-films");
-        sectionCategory.textContent = ""
+        sectionCategory.textContent = "";
         displayCategory(start, moviesList, sectionCategory);
-        window.localStorage.setItem("BFStart", JSON.stringify(start))
+        window.localStorage.setItem("BFStart", JSON.stringify(start));
     }
 })
 
 /* Category1 right button handling */
 let navBtnCat1Right = document.querySelector(".btn.Cat1-right");
 navBtnCat1Right.addEventListener("click", async function (event) {
-    categoryRightButtonHandling("category1", "cat1Start", "#category1")
+    categoryRightButtonHandling("category1", "cat1Start", "#category1");
 })
 
 /* Category1 left button handling */
 let navBtnCat1Left = document.querySelector(".btn.Cat1-left");
 navBtnCat1Left.addEventListener("click", async function (event) {
-    categoryLeftButtonHandling("category1", "cat1Start", "#category1")
+    categoryLeftButtonHandling("category1", "cat1Start", "#category1");
 })
 
 // Category2 right button handling
 let navBtnCat2Right = document.querySelector(".btn.Cat2-right");
 navBtnCat2Right.addEventListener("click", async function (event) {
-    categoryRightButtonHandling("category2", "cat2Start", "#category2")
+    categoryRightButtonHandling("category2", "cat2Start", "#category2");
 })
 
 // Category2 left button handling
 let navBtnCat2Left = document.querySelector(".btn.Cat2-left");
 navBtnCat2Left.addEventListener("click", async function (event) {
-    categoryLeftButtonHandling("category2", "cat2Start", "#category2")
+    categoryLeftButtonHandling("category2", "cat2Start", "#category2");
 })
 
 // Category3 right button handling
 let navBtnCat3Right = document.querySelector(".btn.Cat3-right");
 navBtnCat3Right.addEventListener("click", async function (event) {
-    categoryRightButtonHandling("category3", "cat3Start", "#category3")
+    categoryRightButtonHandling("category3", "cat3Start", "#category3");
 })
 
 // Category3 left button handling
 let navBtnCat3Left = document.querySelector(".btn.Cat3-left");
 navBtnCat3Left.addEventListener("click", async function (event) {
-    categoryLeftButtonHandling("category3", "cat3Start", "#category3")
+    categoryLeftButtonHandling("category3", "cat3Start", "#category3");
 })
 
 /* listener to detect chnages in screen size and

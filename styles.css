@@ -215,10 +215,10 @@ footer{
 
 /**** Modal ****/
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    width: 600px; /* Full width */
+    display: none;
+    position: fixed;
+    z-index: 1;
+    width: 600px;
 
     left: 50%;
     top: 50%;
