@@ -1,5 +1,7 @@
-let displayNumber = 4;
+/* Script to display data using the OCMovies-API-EN-FR */
 
+let displayNumber = 4;
+/* define carroussel size display for various screen configuaration */
 let smallScreen = window.matchMedia("screen and (max-width: 660px)");
 let mediumScreen = window.matchMedia("screen and (max-width: 900px)");
 let largeScreen = window.matchMedia("screen and (max-width: 1150px)");
@@ -16,7 +18,7 @@ if (smallScreen.matches) {
 }
 
 async function displayCategory(start, moviesList, category) {
-    /* Display 4 movies from the movieList starting from start
+    /* Display displayNumber movies from the movieList starting from start
       in the category zone */
       category.innerText = "";
       let end = start + displayNumber;
@@ -24,11 +26,6 @@ async function displayCategory(start, moviesList, category) {
       for (let i = start; i < end; i++) {
         let movieArticle = document.createElement("article");
         movieArticle.classList.add("movie-poster");
-        //let movieTitleBox = document.createElement("div");
-        //movieTitleBox.classList.add("movie-title-box");
-        //let nameMovie = document.createElement("h3");
-        //nameMovie.classList.add("movie-title");
-        //nameMovie.innerText = moviesList[i].title;
         let imageMovie = document.createElement("img");
         imageMovie.src = moviesList[i].image_url;
         imageMovie.onclick = function () {
@@ -36,9 +33,6 @@ async function displayCategory(start, moviesList, category) {
             displayMovieInfo(moviesList[i].url)
         
         }
-        /*console.log("Dcat", i);*/
-        //movieTitleBox.appendChild(nameMovie);
-        //movieArticle.appendChild(movieTitleBox);
         movieArticle.appendChild(imageMovie);
         category.appendChild(movieArticle);
 
@@ -46,14 +40,10 @@ async function displayCategory(start, moviesList, category) {
 }
 
 async function displayBestFilm(movieList) {
-    /* display the best film */
+    /* display the best film extracting it from the movieList*/
     let query = await fetch(movieList[0].url);
     let jsonQuery = await query.json();
     let sectionBestFilm = document.querySelector("#best-film");
-    //sectionBestFilm.style.backgroundImage = `url(${movieList[0].image_url})`;
-    //sectionBestFilm.style.backgroundRepeat= "no-repeat";
-    //sectionBestFilm.style.backgroundSize= "cover";
-    //sectionBestFilm.style.backgroundPosition = "center center";
     let moviePoster = document.createElement("div")
     moviePoster.classList.add("BF-poster");
     let movieInfos = document.createElement("div")
@@ -65,6 +55,7 @@ async function displayBestFilm(movieList) {
     movieInfos.classList.add("BF-infos-text");
     let imageMovie = document.createElement("img");
     imageMovie.src = movieList[0].image_url;
+    // informations button creation
     let infoButton = document.createElement("button");
     infoButton.innerText = "Informations";
     infoButton.id = "BestFilmBtn";
@@ -82,6 +73,8 @@ async function displayBestFilm(movieList) {
 }
 
 async function retrieveMoviesList(url, url2, category) {
+    /* retrieve the data from the two url and concatenante them in one list
+       store the data in the local storage */
     let query = await fetch(url);
     let jsonQuery = await query.json();
     let movies1 = jsonQuery.results;
@@ -89,17 +82,16 @@ async function retrieveMoviesList(url, url2, category) {
     let jsonQuery2 = await query2.json();
     let movies2 = jsonQuery2.results;
     let moviesList = movies1.concat(movies2)
-    /*console.log(typeof category);
-    console.log(typeof moviesList);
-    console.log(category, moviesList);*/
     window.localStorage.setItem(category, JSON.stringify(moviesList));
 }
 
 function categoryRightButtonHandling(category, startItem, selector) {
+    /* handle the right button for the carroussel */
     let moviesList = JSON.parse(window.localStorage.getItem(category))
     let start = JSON.parse(window.localStorage.getItem(startItem))
 
     if (start < (10 - displayNumber)) {
+        /* if there is still place switch the films displayed from one to the right */ 
         start += 1
         let sectionCategory = document.querySelector(selector);
         sectionCategory.textContent = ""
@@ -109,10 +101,12 @@ function categoryRightButtonHandling(category, startItem, selector) {
 }
 
 function categoryLeftButtonHandling(category, startItem, selector) {
+    /* handle the lfht button for the carroussel */
     let moviesList = JSON.parse(window.localStorage.getItem(category))
     let start = JSON.parse(window.localStorage.getItem(startItem))
 
     if (start > 0) {
+        /* if there is still place switch the films displayed from one to the left */ 
         start -= 1
         let sectionCategory = document.querySelector(selector);
         sectionCategory.textContent = ""
@@ -122,6 +116,7 @@ function categoryLeftButtonHandling(category, startItem, selector) {
 }
 
 async function displayMovieInfo(url) {
+    /* display the movie info in the modal */ 
     let query = await fetch(url);
     let jsonQuery = await query.json();
     // get the modal
@@ -129,11 +124,11 @@ async function displayMovieInfo(url) {
     modalPoster.textContent = ""
     let modalInfos = document.querySelector(".modal-movie-info");
     modalInfos.textContent = ""
-    
+    // set the poster
     let imageMovie = document.createElement("img");
     imageMovie.src = jsonQuery.image_url;
     modalPoster.appendChild(imageMovie);
- 
+    // display the informations
     let movieInfos = document.createElement("article");
     let nameMovie = document.createElement("h3");
     nameMovie.innerText = jsonQuery.title;
@@ -186,8 +181,7 @@ async function displayMovieInfo(url) {
 }
 
 function displayAllCategory(){
-    
-    //console.log("disNum : ",displayNumber);
+    /* display all the category in the carrousel */    
     moviesList = JSON.parse(window.localStorage.getItem("best-films"))
     let sectionCategory = document.querySelector("#other-best-films");
     let BFStart = JSON.parse(window.localStorage.getItem("BFStart"))
@@ -195,7 +189,6 @@ function displayAllCategory(){
 
     /* display category 1 */
     moviesList = JSON.parse(window.localStorage.getItem("category1"))
-    /*console.log("cat1", moviesList)*/
     sectionCategory = document.querySelector("#category1");
     let cat1Start = JSON.parse(window.localStorage.getItem("cat1Start"))
     displayCategory(cat1Start, moviesList, sectionCategory)
@@ -213,12 +206,13 @@ function displayAllCategory(){
     displayCategory(cat3Start, moviesList, sectionCategory)
 }
 
-/* Set the width of the side navigation to 250px */
+/* side navigatin for small screen handling */
+/* Set the width of the side navigation to 250px to display it */
 function openNav() {
   sidenav.classList.add("active");
 }
 
-/* Set the width of the side navigation to 0 */
+/* Set the width of the side navigation to 0 to hide it*/
 function closeNav() {
   sidenav.classList.remove("active");
 }
@@ -245,7 +239,7 @@ url2 = "http://localhost:8000/api/v1/titles/?genre=Adventure&page=2&sort_by=-imd
 retrieveMoviesList(url1, url2, "category3");
 window.localStorage.setItem("cat3Start", JSON.stringify(0));
 
-/* display Bests films*/
+/* display the Best film informations */
 let moviesList = JSON.parse(window.localStorage.getItem("best-films"))
 displayBestFilm(moviesList);
 
@@ -255,18 +249,6 @@ displayAllCategory()
 let navBtnBFRight = document.querySelector(".btn.BF-right");
 navBtnBFRight.addEventListener("click", async function (event) {
     categoryRightButtonHandling("best-films", "BFStart", "#other-best-films")
-    /*
-    let moviesList = JSON.parse(window.localStorage.getItem("best-films"))
-    let start = JSON.parse(window.localStorage.getItem("BFStart"))
-
-    if (start < (10 - displayNumber)) {
-        start += 1
-        let sectionCategory = document.querySelector("#other-best-films");
-        sectionCategory.textContent = ""
-        displayCategory(start, moviesList, sectionCategory);
-        window.localStorage.setItem("BFStart", JSON.stringify(start))
-    }
-    */
 })
 
 /* Best Films category left button handling */
@@ -320,6 +302,8 @@ navBtnCat3Left.addEventListener("click", async function (event) {
     categoryLeftButtonHandling("category3", "cat3Start", "#category3")
 })
 
+/* listener to detect chnages in screen size and
+   change the number of films dispalyed in carroussel */
 smallScreen.addEventListener("change", function(event){
     displayNumber = 1;
     displayAllCategory();
@@ -339,6 +323,7 @@ xLargeScreen.addEventListener("change", function(event){
     displayAllCategory();
 })
 
+// movie informations modal handling
 // Get the modal
 let modal = document.getElementById("movieModal");
 
@@ -347,13 +332,6 @@ let btn = document.getElementById("BestFilmBtn");
 
 // Get the <span> element that closes the modal
 let span = document.getElementsByClassName("modal-close")[0];
-
-// When the user clicks on the button, open the modal
-/*btn.onclick = function () {
-    modal.style.display = "block";
-    displayMovieInfo("http://localhost:8000/api/v1/titles/1508669")
-
-}*/
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function () {
@@ -367,6 +345,7 @@ window.onclick = function (event) {
     }
 }
 
+// burger menu handling
 let sidenav = document.getElementById("mySidenav");
 let openBtn = document.getElementById("openBtn");
 let closeBtn = document.getElementById("closeBtn");

@@ -118,7 +118,6 @@ main{
     justify-content: center;
     text-align: center;
 }
-
 #best-film{
     background: rgb(0,0,0);
     background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(64,64,64,1) 57%, rgba(128,128,128,1) 100%);
@@ -181,13 +180,6 @@ button:active {
     align-items: center;
 
 }
-.movie-title-box{
-    height: 4em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 div.carroussel {
     width: 900px;
 	display: flex;
@@ -212,6 +204,7 @@ article.movie-poster{
 .chevron-compact-right:hover {
     stroke: #bfbfbf;
 }
+/**** footer ****/
 footer{
     margin-top: 20px;
     display: flex;
@@ -220,7 +213,7 @@ footer{
     height: 50px;
 }
 
-/* Modal background */
+/**** Modal ****/
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -236,7 +229,7 @@ footer{
         max-width: 75%;
     }
 }
-/* Modal Content/Box */
+/* Modal Content Box */
 .modal-content {
     display: flex;
     justify-content: space-between;
