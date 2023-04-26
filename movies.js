@@ -40,9 +40,10 @@ function displayCategory(start, moviesList, category) {
     }
 }
 
-async function displayBestFilm(movieList) {
-    /* display the best film extracting it from the movieList*/
-    let query = await fetch(movieList[0].url);
+async function displayBestFilm() {
+    // display the best film retrieving it from local storage
+    let bestFilm = JSON.parse(window.localStorage.getItem("bestFilm"));
+    let query = await fetch(bestFilm.url);
     let jsonQuery = await query.json();
     let sectionBestFilm = document.querySelector("#best-film");
     let moviePoster = document.createElement("div");
@@ -50,13 +51,13 @@ async function displayBestFilm(movieList) {
     let movieInfos = document.createElement("div");
     movieInfos.classList.add("BF-infos");
     let nameMovie = document.createElement("h1");
-    nameMovie.innerText = movieList[0].title;
+    nameMovie.innerText = bestFilm.title;
     let descriptionMovie = document.createElement("p");
     descriptionMovie.innerText = jsonQuery.description;
     movieInfos.classList.add("BF-infos-text");
     let imageMovie = document.createElement("img");
-    imageMovie.src = movieList[0].image_url;
-    imageMovie.alt = movieList[0].title;
+    imageMovie.src = bestFilm.image_url;
+    imageMovie.alt = bestFilm.title;
     // informations button creation
     let infoButton = document.createElement("button");
     infoButton.innerText = "Informations";
@@ -64,7 +65,7 @@ async function displayBestFilm(movieList) {
     // When the user clicks on the button, open the modal
     infoButton.onclick = function () {
         modal.style.display = "block";
-        displayMovieInfo(movieList[0].url)
+        displayMovieInfo(bestFilm.url)
     }
     movieInfos.appendChild(nameMovie);
     movieInfos.appendChild(descriptionMovie);
@@ -74,32 +75,53 @@ async function displayBestFilm(movieList) {
     sectionBestFilm.appendChild(movieInfos);
 }
 
-async function retrieveMoviesList(url, url2, category) {
-    /* retrieve the data from the two url and concatenante them in one list
-       store the data in the local storage */
+async function retrieveMoviesList(url, category) {
+    /* retrieve the data from the url and concatenante them with the one stored
+       in the local storage */
     let query = await fetch(url);
     let jsonQuery = await query.json();
-    let movies1 = jsonQuery.results;
-    let query2 = await fetch(url2);
-    let jsonQuery2 = await query2.json();
-    let movies2 = jsonQuery2.results;
-    let moviesList = movies1.concat(movies2);
+    let moviesList = jsonQuery.results;
+    let nextUrl = jsonQuery.next;
+    let urlLabel = category +"url";
+    if (category == "best-films"){
+        let bestFilm = moviesList.shift();
+        window.localStorage.setItem("bestFilm", JSON.stringify(bestFilm));
+    }
+    window.localStorage.setItem(urlLabel, JSON.stringify(nextUrl));
     window.localStorage.setItem(category, JSON.stringify(moviesList));
 }
 
-function categoryRightButtonHandling(category, startItem, selector) {
+async function updateMoviesList(category) {
+    /* retrieve the data from the url and concatenante them with the one stored
+       in the local storage */
+    let urlLabel = category +"url";
+    let nextUrl = JSON.parse(window.localStorage.getItem(urlLabel));
+    let prevMoviesList = JSON.parse(window.localStorage.getItem(category));
+    let query = await fetch(nextUrl);
+    let jsonQuery = await query.json();
+    let newMoviesList = prevMoviesList.concat(jsonQuery.results);
+    nextUrl = jsonQuery.next;
+    window.localStorage.setItem(urlLabel, JSON.stringify(nextUrl));
+    window.localStorage.setItem(category, JSON.stringify(newMoviesList));
+}
+
+async function categoryRightButtonHandling(category, startItem, selector) {
     /* handle the right button for the carroussel */
     let moviesList = JSON.parse(window.localStorage.getItem(category));
     let start = JSON.parse(window.localStorage.getItem(startItem));
 
-    if (start < (10 - displayNumber)) {
-        /* if there is still place switch the films displayed from one to the right */ 
-        start += 1;
-        let sectionCategory = document.querySelector(selector);
-        sectionCategory.textContent = "";
-        displayCategory(start, moviesList, sectionCategory);
-        window.localStorage.setItem(startItem, JSON.stringify(start));
+    if ((start + displayNumber) == moviesList.length) {
+        // there is not enough films in the list retrieve more films 
+        await updateMoviesList(category);
+        moviesList = JSON.parse(window.localStorage.getItem(category));
     }
+
+    // switch the films displayed from one to the right */ 
+    start += 1;
+    let sectionCategory = document.querySelector(selector);
+    sectionCategory.textContent = "";
+    displayCategory(start, moviesList, sectionCategory);
+    window.localStorage.setItem(startItem, JSON.stringify(start));
 }
 
 function categoryLeftButtonHandling(category, startItem, selector) {
@@ -185,7 +207,7 @@ async function displayMovieInfo(url) {
 
 function displayAllCategory(){
     /* display all the category in the carrousel */    
-    moviesList = JSON.parse(window.localStorage.getItem("best-films"));
+    let moviesList = JSON.parse(window.localStorage.getItem("best-films"));
     let sectionCategory = document.querySelector("#other-best-films");
     let BFStart = JSON.parse(window.localStorage.getItem("BFStart"));
     displayCategory(BFStart, moviesList, sectionCategory);
@@ -221,31 +243,26 @@ function closeNav() {
 }
 
 /* retrieve data from database and store in local storage*/
-let url1 = "http://localhost:8000/api/v1/titles/?sort_by=-imdb_score,title";
-let url2 = "http://localhost:8000/api/v1/titles/?page=2&sort_by=-imdb_score%2Ctitle";
-retrieveMoviesList(url1, url2, "best-films");
-window.localStorage.setItem("BFStart", JSON.stringify(1));
+let url = "http://localhost:8000/api/v1/titles/?sort_by=-imdb_score,title";
+retrieveMoviesList(url, "best-films");
+window.localStorage.setItem("BFStart", JSON.stringify(0));
 
 
-url1 = "http://localhost:8000/api/v1/titles/?genre=Sci-Fi&sort_by=-imdb_score,title";
-url2 = "http://localhost:8000/api/v1/titles/?genre=Sci-Fi&page=2&sort_by=-imdb_score%2Ctitle";
-retrieveMoviesList(url1, url2, "category1");
+url = "http://localhost:8000/api/v1/titles/?genre=Sci-Fi&sort_by=-imdb_score,title";
+retrieveMoviesList(url, "category1");
 window.localStorage.setItem("cat1Start", JSON.stringify(0));
 
-url1 = "http://localhost:8000/api/v1/titles/?genre=Comedy&sort_by=-imdb_score,title";
-url2 = "http://localhost:8000/api/v1/titles/?genre=Comedy&page=2&sort_by=-imdb_score%2Ctitle";
-retrieveMoviesList(url1, url2, "category2");
+url = "http://localhost:8000/api/v1/titles/?genre=Comedy&sort_by=-imdb_score,title";
+retrieveMoviesList(url, "category2");
 window.localStorage.setItem("cat2Start", JSON.stringify(0));
 
-url1 = "http://localhost:8000/api/v1/titles/?genre=Adventure&sort_by=-imdb_score,title";
-url2 = "http://localhost:8000/api/v1/titles/?genre=Adventure&page=2&sort_by=-imdb_score%2Ctitle";
-retrieveMoviesList(url1, url2, "category3");
+url = "http://localhost:8000/api/v1/titles/?genre=Adventure&sort_by=-imdb_score,title";
+retrieveMoviesList(url, "category3");
 window.localStorage.setItem("cat3Start", JSON.stringify(0));
 
-/* display the Best film informations */
-let moviesList = JSON.parse(window.localStorage.getItem("best-films"));
-displayBestFilm(moviesList);
-
+// display the Best film informations
+displayBestFilm();
+// display the categories
 displayAllCategory();
 
 /* Best Films category right button handling */
@@ -257,16 +274,7 @@ navBtnBFRight.addEventListener("click", async function (event) {
 /* Best Films category left button handling */
 let navBtnBFLeft = document.querySelector(".btn.BF-left");
 navBtnBFLeft.addEventListener("click", async function (event) {
-    let moviesList = JSON.parse(window.localStorage.getItem("best-films"));
-    let start = JSON.parse(window.localStorage.getItem("BFStart"));
-
-    if (start > 1) {
-        start -= 1
-        let sectionCategory = document.querySelector("#other-best-films");
-        sectionCategory.textContent = "";
-        displayCategory(start, moviesList, sectionCategory);
-        window.localStorage.setItem("BFStart", JSON.stringify(start));
-    }
+    categoryLeftButtonHandling("best-films", "BFStart", "#other-best-films");
 })
 
 /* Category1 right button handling */
