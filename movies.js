@@ -76,8 +76,7 @@ async function displayBestFilm() {
 }
 
 async function retrieveMoviesList(url, category) {
-    /* retrieve the data from the url and concatenante them with the one stored
-       in the local storage */
+    /* retrieve the data from the url and store in the local storage */
     let query = await fetch(url);
     let jsonQuery = await query.json();
     let moviesList = jsonQuery.results;

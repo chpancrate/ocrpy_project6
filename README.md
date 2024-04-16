@@ -17,3 +17,7 @@ To install and start the API follow the instructions from the readme of the API 
 Clone the following repository in the directory where you want your website to be stored : https://github.com/chpancrate/ocrpy_project6
 
 Open the file index.html with a browser with CORS disabled or using VSCode and Live Server. The API must already be started.
+
+## Screenshot
+
+![index.html](images/index.png)
