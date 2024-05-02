@@ -20,4 +20,15 @@ Open the file index.html with a browser with CORS disabled or using VSCode and L
 
 ## Screenshot
 
+### Homepage
+
 ![index.html](images/index.png)
+
+### Modal
+
+![Modal](images/modal.png)
+
+### Responsive design
+
+![Phone design](images/phone.png)
+
