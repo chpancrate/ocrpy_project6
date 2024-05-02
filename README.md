@@ -18,7 +18,7 @@ Clone the following repository in the directory where you want your website to b
 
 Open the file index.html with a browser with CORS disabled or using VSCode and Live Server. The API must already be started.
 
-## Screenshot
+## Screenshots
 
 ### Homepage
 
@@ -30,5 +30,5 @@ Open the file index.html with a browser with CORS disabled or using VSCode and L
 
 ### Responsive design
 
-![Phone design](images/phone.png)
+<img src="images/phone.png" alt="Image 1" width="300;">
 
